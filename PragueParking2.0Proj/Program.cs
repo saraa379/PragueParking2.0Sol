@@ -30,7 +30,7 @@ namespace PragueParking2._0Proj
             Console.WriteLine();
             Console.WriteLine();
 
-            string sAttr = ConfigurationManager.AppSettings.Get("Key0");
+            string sAttr = ConfigurationManager.AppSettings.Get("CarPrice");
             Console.WriteLine("Value for config file" + sAttr);
 
 
