@@ -6,4 +6,8 @@
     <RootNamespace>PragueParking2._0Proj</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.37.0" />
+  </ItemGroup>
+
 </Project>
