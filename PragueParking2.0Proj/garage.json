@@ -1,0 +1,30 @@
+{
+	"garage": [
+
+		{
+			"parkingSpotNr": 1,
+			"regNr": "empty",
+			"status": "empty",
+			"dateCheckedIn": "empty",
+			"nrOfVehicle": 0,
+			"typeOfVehicle": "empty"
+		},
+		{
+			"parkingSpotNr": 2,
+			"regNr": "empty",
+			"status": "empty",
+			"dateCheckedIn": "empty",
+			"nrOfVehicle": 0,
+			"typeOfVehicle": "empty"
+		},
+		{
+			"parkingSpotNr": 3,
+			"regNr": "empty",
+			"status": "empty",
+			"dateCheckedIn": "empty",
+			"nrOfVehicle": 0,
+			"typeOfVehicle": "empty"
+		}
+
+	]
+}

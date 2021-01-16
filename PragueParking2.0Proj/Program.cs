@@ -10,6 +10,10 @@ using System;
 using Spectre.Console;
 using System.Configuration; //for the XML config file
 using System.Collections.Specialized;//for the XML config file
+using System.Collections.Generic;//for List
+using System.IO;
+
+using Newtonsoft.Json;
 
 namespace PragueParking2._0Proj
 {
@@ -30,10 +34,34 @@ namespace PragueParking2._0Proj
             Console.WriteLine();
             Console.WriteLine();
 
-            string sAttr = ConfigurationManager.AppSettings.Get("CarPrice");
-            Console.WriteLine("Value for config file" + sAttr);
+            PrintParkingSpots();
+            
+
 
 
         }//end of main
-    }//end of class program
+
+        public static void PrintParkingSpots(){
+
+            Console.WriteLine("Parking spots will be printed here");
+            var jsonString = File.ReadAllText("garage.json"); //file not found exception
+
+        }//end of PrintParkingSpots
+        /*{
+            
+
+            private readonly string _path = $"garage.json";
+
+        //var sr = new StreamReader("garage.json");
+
+
+
+            //string sAttr = ConfigurationManager.AppSettings.Get("CarPrice");
+           //Console.WriteLine("Value for config file" + sAttr);
+        }//end of PrintParkingSpots
+
+        */
+
+
+    }//end of class program 
 }//end of namespace
