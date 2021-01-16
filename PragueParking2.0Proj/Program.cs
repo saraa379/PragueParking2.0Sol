@@ -42,10 +42,10 @@ namespace PragueParking2._0Proj
         }//end of main
 
         public static void PrintParkingSpots(){
-
-            Console.WriteLine("Parking spots will be printed here");
+            //getting relative directory of the json file
             string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
-            //var jsonString = File.ReadAllText(@"C:\garage.json");
+            
+            //reading json file and saving the content in the string variable
             var jsonString = File.ReadAllText(directory);
             Console.WriteLine("current directory" + jsonString);
 
