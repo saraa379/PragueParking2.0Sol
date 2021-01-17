@@ -47,10 +47,15 @@ namespace PragueParking2._0Proj
             
             //reading json file and saving the content in the string variable
             var jsonString = File.ReadAllText(directory);
-            Console.WriteLine("current directory" + jsonString);
+            //Console.WriteLine("current directory" + jsonString);
 
-            //deserialaising a json string into C# object
+            //deserialising a json string into C# object
             List<ParkingSpot> parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
+
+            foreach (var parkingSpot in parkingSpotsList)
+            {
+                Console.WriteLine("Regnr: " + parkingSpot.regNr);
+            }
 
         }//end of PrintParkingSpots
 
