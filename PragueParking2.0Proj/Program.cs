@@ -77,7 +77,7 @@ namespace PragueParking2._0Proj
             //Creating table for parkingSpots
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
             int garageSize = Int32.Parse(sAttr);
-            Console.WriteLine("Number is: " + garageSize);
+            //Console.WriteLine("Garage size is: " + garageSize);
 
             int nrOfColumn = 0;
             int nrOfRow = 0;
@@ -95,11 +95,11 @@ namespace PragueParking2._0Proj
             
             //Printing table using Spectre.Console
             Console.WriteLine();
+
             var table = new Table();
             table.Border = TableBorder.HeavyEdge;
             table.BorderColor(new Color(0, 95, 255));
             table.Centered();
-
             //Adding table columns
             for (int i = 0; i <= nrOfColumn; i++)
             {
@@ -107,13 +107,14 @@ namespace PragueParking2._0Proj
             }
 
             //Adding rows to the table
-            int iterator = 0;
+
             for (int it = 0; it < nrOfRow; it++)
             {
+
                 for (int i = 0; i <= nrOfColumn; i++)
                 {
                     //table.AddColumn("Column");
-                    //iterator = iterator + 1;
+                    //int counter = it * 10 + i; //position of a object in a list
                 }
             }
 
