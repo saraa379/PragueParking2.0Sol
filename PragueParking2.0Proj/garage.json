@@ -1,28 +1,164 @@
- [
+[
 
-		{
-			"parkingSpotNr": 1,
-			"regNr": "empty",
-			"status": "empty",
-			"dateCheckedIn": "empty",
-			"nrOfVehicle": 0,
-			"typeOfVehicle": "empty"
-		},
-		{
-			"parkingSpotNr": 2,
-			"regNr": "empty",
-			"status": "empty",
-			"dateCheckedIn": "empty",
-			"nrOfVehicle": 0,
-			"typeOfVehicle": "empty"
-		},
-		{
-			"parkingSpotNr": 3,
-			"regNr": "empty",
-			"status": "empty",
-			"dateCheckedIn": "empty",
-			"nrOfVehicle": 0,
-			"typeOfVehicle": "empty"
-		}
+	{
+		"parkingSpotNr": 1,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 2,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 3,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 4,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 5,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 6,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 7,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 8,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 9,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 10,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 1,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 2,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 3,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 4,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 5,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 6,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 7,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 8,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 9,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 10,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
+	}
 
-	]
+]

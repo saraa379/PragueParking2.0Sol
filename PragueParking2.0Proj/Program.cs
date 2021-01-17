@@ -41,21 +41,92 @@ namespace PragueParking2._0Proj
 
         }//end of main
 
-        public static void PrintParkingSpots(){
+
+        public static ParkingSpot[] GetParkingSpotsArray()
+        {
             //getting relative directory of the json file
             string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
-            
+
+            //reading json file and saving the content in the string variable
+            var jsonString = File.ReadAllText(directory);
+            //Console.WriteLine("current directory" + jsonString);
+
+            //deserialising a json string into C# object
+            ParkingSpot[] parkingSpotsArray = JsonConvert.DeserializeObject<ParkingSpot[]>(jsonString);
+            return parkingSpotsArray;
+        }
+
+        public static List<ParkingSpot> GetParkingSpotsList()
+        {
+            //getting relative directory of the json file
+            string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
+
             //reading json file and saving the content in the string variable
             var jsonString = File.ReadAllText(directory);
             //Console.WriteLine("current directory" + jsonString);
 
             //deserialising a json string into C# object
             List<ParkingSpot> parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
+            return parkingSpotsList;
+        }
 
+        public static void PrintParkingSpots(){
+            //gets list of ParkingSpots from JSON file
+            List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
+
+            //Creating table for parkingSpots
+            string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
+            int garageSize = Int32.Parse(sAttr);
+            Console.WriteLine("Number is: " + garageSize);
+
+            int nrOfColumn = 0;
+            int nrOfRow = 0;
+
+            if (garageSize >= 10)
+            {
+                nrOfRow = garageSize / 10 + 1;
+                nrOfColumn = 10;
+            } else
+            {
+                nrOfColumn = garageSize;
+                nrOfRow = 1;
+            }
+       
+            
+            //Printing table using Spectre.Console
+            Console.WriteLine();
+            var table = new Table();
+            table.Border = TableBorder.HeavyEdge;
+            table.BorderColor(new Color(0, 95, 255));
+            table.Centered();
+
+            //Adding table columns
+            for (int i = 0; i <= nrOfColumn; i++)
+            {
+                table.AddColumn("Column");
+            }
+
+            //Adding rows to the table
+            int iterator = 0;
+            for (int it = 0; it < nrOfRow; it++)
+            {
+                for (int i = 0; i <= nrOfColumn; i++)
+                {
+                    //table.AddColumn("Column");
+                    //iterator = iterator + 1;
+                }
+            }
+
+
+            /*
             foreach (var parkingSpot in parkingSpotsList)
             {
-                Console.WriteLine("Regnr: " + parkingSpot.regNr);
-            }
+                table.AddColumn($"[bold dodgerblue2]{parkingSpot.regNr}[/]");
+            }*/
+
+            table.Expand();
+            AnsiConsole.Render(table);
+
 
         }//end of PrintParkingSpots
 
