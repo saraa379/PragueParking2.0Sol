@@ -12,6 +12,7 @@ using System.Configuration; //for the XML config file
 using System.Collections.Specialized;//for the XML config file
 using System.Collections.Generic;//for List
 using System.IO; //for file reading and writing
+using System.Linq;
 
 using Newtonsoft.Json;
 
@@ -73,50 +74,73 @@ namespace PragueParking2._0Proj
         public static void PrintParkingSpots(){
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
+            int listSize = parkingSpotsList.Count;
+            Console.WriteLine("Size of the list: " + listSize);
 
             //Creating table for parkingSpots
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
             int garageSize = Int32.Parse(sAttr);
-            //Console.WriteLine("Garage size is: " + garageSize);
+            Console.WriteLine("Garage size is: " + garageSize);
 
             int nrOfColumn = 0;
             int nrOfRow = 0;
 
             if (garageSize >= 10)
             {
-                nrOfRow = garageSize / 10 + 1;
+                nrOfRow = garageSize / 10;
                 nrOfColumn = 10;
             } else
             {
                 nrOfColumn = garageSize;
                 nrOfRow = 1;
             }
-       
-            
+
+            Console.WriteLine("columns: " + nrOfColumn);
+            Console.WriteLine("rows: " + nrOfRow);
+
+
             //Printing table using Spectre.Console
             Console.WriteLine();
 
-            var table = new Table();
-            table.Border = TableBorder.HeavyEdge;
-            table.BorderColor(new Color(0, 95, 255));
-            table.Centered();
-            //Adding table columns
-            for (int i = 0; i <= nrOfColumn; i++)
+            for (int i = 0; i <= nrOfRow; i++)
             {
-                table.AddColumn("Column");
+                var tableNew  = new Table();
+                tableNew.Border = TableBorder.HeavyEdge;
+                tableNew.BorderColor(new Color(0, 95, 255));
+                tableNew.Centered();
+                for (int it = 0; it <= nrOfColumn; it++)
+                {
+                    tableNew.AddColumn("Column");
+                }
+                tableNew.Expand();
+                AnsiConsole.Render(tableNew);
             }
 
             //Adding rows to the table
-
+            /*
             for (int it = 0; it < nrOfRow; it++)
             {
-
-                for (int i = 0; i <= nrOfColumn; i++)
+                //string rowValues = "$";
+                for (int i = 1; i <= nrOfColumn; i++)
                 {
-                    //table.AddColumn("Column");
-                    //int counter = it * 10 + i; //position of a object in a list
+                    int index = it * 10 + i;
+                    if (index < listSize)
+                    {
+                        Console.WriteLine("index inside loop: " + index);
+                        //rowValues += "\"" + parkingSpotsList.ElementAt(index-1).regNr + "\", ";
+                    } else
+                    {
+                        ParkingSpot newParkingSpot = new ParkingSpot();
+                        parkingSpotsList.Add(newParkingSpot);
+                        //rowValues += "\"empty\", ";
+                    }
+                    
+                    //Console.WriteLine("Index: " + index);
                 }
-            }
+                //rowValues = rowValues.Substring(0, rowValues.Length - 2);
+                //Console.WriteLine("rowValues values: " + rowValues);
+                //table.AddRow(rowValues);
+            }*/
 
 
             /*
@@ -125,8 +149,8 @@ namespace PragueParking2._0Proj
                 table.AddColumn($"[bold dodgerblue2]{parkingSpot.regNr}[/]");
             }*/
 
-            table.Expand();
-            AnsiConsole.Render(table);
+            //table.Expand();
+            //AnsiConsole.Render(table);
 
 
         }//end of PrintParkingSpots
