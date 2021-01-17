@@ -11,7 +11,7 @@ using Spectre.Console;
 using System.Configuration; //for the XML config file
 using System.Collections.Specialized;//for the XML config file
 using System.Collections.Generic;//for List
-using System.IO;
+using System.IO; //for file reading and writing
 
 using Newtonsoft.Json;
 
@@ -49,21 +49,10 @@ namespace PragueParking2._0Proj
             var jsonString = File.ReadAllText(directory);
             Console.WriteLine("current directory" + jsonString);
 
+            //deserialaising a json string into C# object
+            List<ParkingSpot> parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
+
         }//end of PrintParkingSpots
-        /*{
-            
-
-            private readonly string _path = $"garage.json";
-
-        //var sr = new StreamReader("garage.json");
-
-
-
-            //string sAttr = ConfigurationManager.AppSettings.Get("CarPrice");
-           //Console.WriteLine("Value for config file" + sAttr);
-        }//end of PrintParkingSpots
-
-        */
 
 
     }//end of class program 
