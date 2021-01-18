@@ -117,7 +117,10 @@ namespace PragueParking2._0Proj
 
                     if (index >= parkingSpotsList.Count)
                     {
-                        tableNew.AddColumn("Column");
+                        ParkingSpot ps = new ParkingSpot(index);
+                        tableNew.AddColumn(ps.regNr);
+                        parkingSpotsList.Add(ps);
+
                     } else
                     {
                         tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
@@ -142,7 +145,9 @@ namespace PragueParking2._0Proj
                     Console.WriteLine("index of cells: " + index);
                     if (index >= parkingSpotsList.Count)
                     {
-                        tableNew.AddColumn("Column");
+                        ParkingSpot ps = new ParkingSpot(index);
+                        tableNew.AddColumn(ps.regNr);
+                        parkingSpotsList.Add(ps);
                     }
                     else
                     {
