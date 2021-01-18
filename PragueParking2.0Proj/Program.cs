@@ -116,6 +116,23 @@ namespace PragueParking2._0Proj
                 AnsiConsole.Render(tableNew);
             }
 
+            int lastRowNrOfCol = garageSize % 10;
+            //Console.WriteLine(" last row: " + lastRowNrOfCol);
+
+            if (lastRowNrOfCol >= 1)
+            {
+                    var tableNew = new Table();
+                    tableNew.Border = TableBorder.HeavyEdge;
+                    tableNew.BorderColor(new Color(0, 95, 255));
+                    tableNew.Alignment(Justify.Left);
+                for (int it = 0; it <= lastRowNrOfCol; it++)
+                    {
+                        tableNew.AddColumn("Column");
+                    }
+                    tableNew.Collapse();
+                    AnsiConsole.Render(tableNew);
+                
+            }
             //Adding rows to the table
             /*
             for (int it = 0; it < nrOfRow; it++)
