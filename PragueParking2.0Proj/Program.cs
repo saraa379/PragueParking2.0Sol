@@ -74,10 +74,11 @@ namespace PragueParking2._0Proj
         public static void SaveListInJsonFile(List<ParkingSpot> parkingSpots)
         {
             ParkingSpot[] parkingSpotArray = parkingSpots.ToArray();
-            var jsonString = JsonConvert.SerializeObject(parkingSpotArray);
+            string jsonString = JsonConvert.SerializeObject(parkingSpotArray);
 
             //getting relative directory of the json file
             string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
+            string path = Path.GetFullPath("test/garage.json");
 
             //Console.WriteLine(jsonString);
 
@@ -86,9 +87,10 @@ namespace PragueParking2._0Proj
                 Console.WriteLine("file doesn't exist");
             } else
             {
-                Console.WriteLine("file exist");
+                //Console.WriteLine("file exist");
                 //writing json string into json file, replacing the old file
                 File.WriteAllText(directory, jsonString);
+                //File.WriteAllText(path, jsonString);
             }
         }
 
@@ -136,7 +138,7 @@ namespace PragueParking2._0Proj
 
 
                     int index = i * 10 + it + 1;
-                    //Console.WriteLine("index of cells: " + index);
+                    Console.WriteLine("index of cells: " + index);
 
                     if (index >= parkingSpotsList.Count)
                     {
@@ -182,7 +184,7 @@ namespace PragueParking2._0Proj
                 for (int it = 0; it < lastRowNrOfCol; it++)
                 {
                     int index = nrOfRow * 10 + it + 1;
-                    //Console.WriteLine("index of cells: " + index);
+                    Console.WriteLine("index of cells: " + index);
                     if (index >= parkingSpotsList.Count)
                     {
                         ParkingSpot ps = new ParkingSpot(index);
