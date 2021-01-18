@@ -2,27 +2,27 @@
 
 	{
 		"parkingSpotNr": 1,
-		"regNr": "empty",
-		"status": "empty",
-		"dateCheckedIn": "empty",
-		"nrOfVehicle": 0,
-		"typeOfVehicle": "empty"
+		"regNr": "kko555",
+		"status": "taken",
+		"dateCheckedIn": "2020-02-20",
+		"nrOfVehicle": 1,
+		"typeOfVehicle": "car"
 	},
 	{
 		"parkingSpotNr": 2,
-		"regNr": "empty",
-		"status": "empty",
-		"dateCheckedIn": "empty",
-		"nrOfVehicle": 0,
-		"typeOfVehicle": "empty"
+		"regNr": "lls999,fff444",
+		"status": "taken",
+		"dateCheckedIn": "2020-02-20,2019-03-30",
+		"nrOfVehicle": 2,
+		"typeOfVehicle": "mc"
 	},
 	{
 		"parkingSpotNr": 3,
-		"regNr": "empty",
-		"status": "empty",
-		"dateCheckedIn": "empty",
-		"nrOfVehicle": 0,
-		"typeOfVehicle": "empty"
+		"regNr": "sss999",
+		"status": "halffull",
+		"dateCheckedIn": "2020-12-30",
+		"nrOfVehicle": 1,
+		"typeOfVehicle": "mc"
 	},
 	{
 		"parkingSpotNr": 4,

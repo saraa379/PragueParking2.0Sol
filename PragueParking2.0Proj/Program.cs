@@ -121,7 +121,7 @@ namespace PragueParking2._0Proj
                         parkingSpotsList.Add(ps);
                         //tableNew.AddColumn(ps.regNr);
                         //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]"));
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]").Centered());
 
 
                     }
@@ -129,12 +129,12 @@ namespace PragueParking2._0Proj
                     {
                         //tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
                         //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]"));
-                    }
-                }
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                    }//end of if
+                }//end of inner for
                 tableNew.Expand();
                 AnsiConsole.Render(tableNew);
-            }
+            }//end of for
 
             int lastRowNrOfCol = garageSize % 10;
             //Console.WriteLine(" last row: " + lastRowNrOfCol);
@@ -155,51 +155,20 @@ namespace PragueParking2._0Proj
                         //tableNew.AddColumn(ps.regNr);
                         parkingSpotsList.Add(ps);
                         //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Footer("EDC").Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]"));
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]").Centered());
                     }
                     else
                     {
                         //tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
                         //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]"));
-                    }
-                }
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                        
+                    }//end of if
+                }//end of inner for
                     tableNew.Collapse();
                     AnsiConsole.Render(tableNew);
-                
-            }
-            //Adding rows to the table
-            /*
-            for (int it = 0; it < nrOfRow; it++)
-            {
-                //string rowValues = "$";
-                for (int i = 1; i <= nrOfColumn; i++)
-                {
-                    int index = it * 10 + i;
-                    if (index < listSize)
-                    {
-                        Console.WriteLine("index inside loop: " + index);
-                        //rowValues += "\"" + parkingSpotsList.ElementAt(index-1).regNr + "\", ";
-                    } else
-                    {
-                        ParkingSpot newParkingSpot = new ParkingSpot();
-                        parkingSpotsList.Add(newParkingSpot);
-                        //rowValues += "\"empty\", ";
-                    }
-                    
-                    //Console.WriteLine("Index: " + index);
-                }
-                //rowValues = rowValues.Substring(0, rowValues.Length - 2);
-                //Console.WriteLine("rowValues values: " + rowValues);
-                //table.AddRow(rowValues);
-            }*/
-
-
-            /*
-            foreach (var parkingSpot in parkingSpotsList)
-            {
-                table.AddColumn($"[bold dodgerblue2]{parkingSpot.regNr}[/]");
-            }*/
+                    //table.AddColumn($"[bold dodgerblue2]{parkingSpot.regNr}[/]");
+            }//end of if
 
 
 
