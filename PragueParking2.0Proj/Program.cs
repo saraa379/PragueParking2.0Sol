@@ -104,7 +104,7 @@ namespace PragueParking2._0Proj
 
             for (int i = 0; i < nrOfRow; i++)
             {
-                var tableNew  = new Table();
+                var tableNew = new Table();
                 tableNew.Border = TableBorder.HeavyEdge;
                 tableNew.BorderColor(new Color(0, 95, 255));
                 tableNew.Centered();
@@ -113,17 +113,23 @@ namespace PragueParking2._0Proj
 
 
                     int index = i * 10 + it + 1;
-                    Console.WriteLine("index of cells: " + index);
+                    //Console.WriteLine("index of cells: " + index);
 
                     if (index >= parkingSpotsList.Count)
                     {
                         ParkingSpot ps = new ParkingSpot(index);
-                        tableNew.AddColumn(ps.regNr);
                         parkingSpotsList.Add(ps);
+                        //tableNew.AddColumn(ps.regNr);
+                        //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Centered());
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]"));
 
-                    } else
+
+                    }
+                    else
                     {
-                        tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                        //tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                        //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]"));
                     }
                 }
                 tableNew.Expand();
@@ -142,16 +148,20 @@ namespace PragueParking2._0Proj
                 for (int it = 0; it < lastRowNrOfCol; it++)
                 {
                     int index = nrOfRow * 10 + it + 1;
-                    Console.WriteLine("index of cells: " + index);
+                    //Console.WriteLine("index of cells: " + index);
                     if (index >= parkingSpotsList.Count)
                     {
                         ParkingSpot ps = new ParkingSpot(index);
-                        tableNew.AddColumn(ps.regNr);
+                        //tableNew.AddColumn(ps.regNr);
                         parkingSpotsList.Add(ps);
+                        //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Footer("EDC").Centered());
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]"));
                     }
                     else
                     {
-                        tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                        //tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                        //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]"));
                     }
                 }
                     tableNew.Collapse();
