@@ -71,16 +71,39 @@ namespace PragueParking2._0Proj
             return parkingSpotsList;
         }
 
+        public static void SaveListInJsonFile(List<ParkingSpot> parkingSpots)
+        {
+            ParkingSpot[] parkingSpotArray = parkingSpots.ToArray();
+            var jsonString = JsonConvert.SerializeObject(parkingSpotArray);
+
+            //getting relative directory of the json file
+            string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
+
+            //Console.WriteLine(jsonString);
+
+            if (!File.Exists(directory))
+            {
+                Console.WriteLine("file doesn't exist");
+            } else
+            {
+                Console.WriteLine("file exist");
+                //writing json string into json file, replacing the old file
+                File.WriteAllText(directory, jsonString);
+            }
+        }
+
         public static void PrintParkingSpots(){
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             int listSize = parkingSpotsList.Count;
-            Console.WriteLine("Size of the list: " + listSize);
+            //Console.WriteLine("Size of the list: " + listSize);
 
             //Creating table for parkingSpots
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
             int garageSize = Int32.Parse(sAttr);
             Console.WriteLine("Garage size is: " + garageSize);
+            Console.WriteLine("Parkingspots with red numbers are taken");
+            Console.WriteLine("Parkingspots with yellow numbers have a place for 1 MC");
 
             int nrOfColumn = 0;
             int nrOfRow = 0;
@@ -95,8 +118,8 @@ namespace PragueParking2._0Proj
                 nrOfRow = 1;
             }
 
-            Console.WriteLine("columns: " + nrOfColumn);
-            Console.WriteLine("rows: " + nrOfRow);
+            //Console.WriteLine("columns: " + nrOfColumn);
+            //Console.WriteLine("rows: " + nrOfRow);
 
 
             //Printing table using Spectre.Console
@@ -119,7 +142,6 @@ namespace PragueParking2._0Proj
                     {
                         ParkingSpot ps = new ParkingSpot(index);
                         parkingSpotsList.Add(ps);
-                        //tableNew.AddColumn(ps.regNr);
                         //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Centered());
                         tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]").Centered());
 
@@ -127,9 +149,21 @@ namespace PragueParking2._0Proj
                     }
                     else
                     {
-                        //tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                        string status = parkingSpotsList.ElementAt(index - 1).status;
+                        switch (status)
+                        {
+                            case "taken":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                                break;
+                            case "halffull":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                                break;
+                            default:
+                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                                break;
+                        }
+
                         //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
                     }//end of if
                 }//end of inner for
                 tableNew.Expand();
@@ -152,16 +186,26 @@ namespace PragueParking2._0Proj
                     if (index >= parkingSpotsList.Count)
                     {
                         ParkingSpot ps = new ParkingSpot(index);
-                        //tableNew.AddColumn(ps.regNr);
                         parkingSpotsList.Add(ps);
                         //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Footer("EDC").Centered());
                         tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]").Centered());
                     }
                     else
                     {
-                        //tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                        string status = parkingSpotsList.ElementAt(index - 1).status;
+                        switch (status)
+                        {
+                            case "taken":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                                break;
+                            case "halffull":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                                break;
+                            default:
+                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
+                                break;
+                        }
                         //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
                         
                     }//end of if
                 }//end of inner for
@@ -171,6 +215,8 @@ namespace PragueParking2._0Proj
             }//end of if
 
 
+            //Save ParkingSpotsList into a json file
+            SaveListInJsonFile(parkingSpotsList);
 
         }//end of PrintParkingSpots
 
