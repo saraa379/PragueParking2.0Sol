@@ -23,5 +23,15 @@ namespace PragueParking2._0Proj
             nrOfVehicle = 0;
             typeOfVehicle = "empty";
         }
+
+        public ParkingSpot(int nr)
+        {
+            parkingSpotNr = nr;
+            regNr = "empty";
+            status = "empty";
+            dateCheckedIn = "empty";
+            nrOfVehicle = 0;
+            typeOfVehicle = "empty";
+        }
     }
 }

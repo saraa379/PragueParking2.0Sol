@@ -102,15 +102,26 @@ namespace PragueParking2._0Proj
             //Printing table using Spectre.Console
             Console.WriteLine();
 
-            for (int i = 0; i <= nrOfRow; i++)
+            for (int i = 0; i < nrOfRow; i++)
             {
                 var tableNew  = new Table();
                 tableNew.Border = TableBorder.HeavyEdge;
                 tableNew.BorderColor(new Color(0, 95, 255));
                 tableNew.Centered();
-                for (int it = 0; it <= nrOfColumn; it++)
+                for (int it = 0; it < nrOfColumn; it++)
                 {
-                    tableNew.AddColumn("Column");
+
+
+                    int index = i * 10 + it + 1;
+                    Console.WriteLine("index of cells: " + index);
+
+                    if (index >= parkingSpotsList.Count)
+                    {
+                        tableNew.AddColumn("Column");
+                    } else
+                    {
+                        tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                    }
                 }
                 tableNew.Expand();
                 AnsiConsole.Render(tableNew);
@@ -125,10 +136,19 @@ namespace PragueParking2._0Proj
                     tableNew.Border = TableBorder.HeavyEdge;
                     tableNew.BorderColor(new Color(0, 95, 255));
                     tableNew.Alignment(Justify.Left);
-                for (int it = 0; it <= lastRowNrOfCol; it++)
+                for (int it = 0; it < lastRowNrOfCol; it++)
+                {
+                    int index = nrOfRow * 10 + it + 1;
+                    Console.WriteLine("index of cells: " + index);
+                    if (index >= parkingSpotsList.Count)
                     {
                         tableNew.AddColumn("Column");
                     }
+                    else
+                    {
+                        tableNew.AddColumn(parkingSpotsList.ElementAt(index - 1).regNr);
+                    }
+                }
                     tableNew.Collapse();
                     AnsiConsole.Render(tableNew);
                 
@@ -166,8 +186,6 @@ namespace PragueParking2._0Proj
                 table.AddColumn($"[bold dodgerblue2]{parkingSpot.regNr}[/]");
             }*/
 
-            //table.Expand();
-            //AnsiConsole.Render(table);
 
 
         }//end of PrintParkingSpots
