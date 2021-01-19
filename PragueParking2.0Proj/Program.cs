@@ -35,41 +35,74 @@ namespace PragueParking2._0Proj
             Console.WriteLine();
             Console.WriteLine();
 
-            PrintParkingSpots();
-            
+            //PrintParkingSpots();
+            GetParkingSpotsList();
 
 
 
         }//end of main
 
 
-        public static ParkingSpot[] GetParkingSpotsArray()
+        public static ParkingSpot[] CreateParkingSpotsList()
         {
-            //getting relative directory of the json file
-            string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
+            string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
+            int garageSize = Int32.Parse(sAttr);
+            ParkingSpot[] parkingSpotsArray = new ParkingSpot[garageSize];
 
-            //reading json file and saving the content in the string variable
-            var jsonString = File.ReadAllText(directory);
-            //Console.WriteLine("current directory" + jsonString);
+            //create a array of parkingspots
+            for (int i = 0; i < garageSize; i++)
+            {
+                ParkingSpot ps = new ParkingSpot(i+1);
+                parkingSpotsArray[i] = ps;
+            }
+            /*
+            foreach (ParkingSpot ps in parkingSpotsArray)
+            {
+                Console.WriteLine("array: " + ps.parkingSpotNr);
+            }*/
 
-            //deserialising a json string into C# object
-            ParkingSpot[] parkingSpotsArray = JsonConvert.DeserializeObject<ParkingSpot[]>(jsonString);
+            SaveArrayInJsonFile(parkingSpotsArray);
             return parkingSpotsArray;
+        }
+
+        public static void SaveArrayInJsonFile(ParkingSpot[] parkingSpots)
+        {
+            string jsonString = JsonConvert.SerializeObject(parkingSpots);
+            Console.WriteLine("array: " + jsonString);
+            //getting relative directory of the project folder
+            string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\garage.json"));
+            File.WriteAllText(path, jsonString);
         }
 
         public static List<ParkingSpot> GetParkingSpotsList()
         {
             //getting relative directory of the json file
-            string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
+            string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\garage.json"));
+            string path2 = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\garage3.json"));
+
+            List<ParkingSpot> parkingSpotsList;
+
+            //check if file exist before reading from it
+            if (!File.Exists(path2))
+            {
+                Console.WriteLine("file doesn't exist");
+                ParkingSpot[] parkingSpotsArray = CreateParkingSpotsList();
+            }
+            else
+            {
+
+                Console.WriteLine("File exist");
+            }
 
             //reading json file and saving the content in the string variable
-            var jsonString = File.ReadAllText(directory);
+            var jsonString = File.ReadAllText(path);
             //Console.WriteLine("current directory" + jsonString);
-
             //deserialising a json string into C# object
-            List<ParkingSpot> parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
+            parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
             return parkingSpotsList;
         }
+
+       
 
         public static void SaveListInJsonFile(List<ParkingSpot> parkingSpots)
         {
@@ -98,7 +131,7 @@ namespace PragueParking2._0Proj
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             int listSize = parkingSpotsList.Count;
-            //Console.WriteLine("Size of the list: " + listSize);
+            Console.WriteLine("Size of the list: " + listSize);
 
             //Creating table for parkingSpots
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
@@ -127,98 +160,7 @@ namespace PragueParking2._0Proj
             //Printing table using Spectre.Console
             Console.WriteLine();
 
-            for (int i = 0; i < nrOfRow; i++)
-            {
-                var tableNew = new Table();
-                tableNew.Border = TableBorder.HeavyEdge;
-                tableNew.BorderColor(new Color(0, 95, 255));
-                tableNew.Centered();
-                for (int it = 0; it < nrOfColumn; it++)
-                {
-
-
-                    int index = i * 10 + it + 1;
-                    Console.WriteLine("index of cells: " + index);
-
-                    if (index >= parkingSpotsList.Count)
-                    {
-                        ParkingSpot ps = new ParkingSpot(index);
-                        parkingSpotsList.Add(ps);
-                        //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]").Centered());
-
-
-                    }
-                    else
-                    {
-                        string status = parkingSpotsList.ElementAt(index - 1).status;
-                        switch (status)
-                        {
-                            case "taken":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
-                                break;
-                            case "halffull":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
-                                break;
-                            default:
-                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
-                                break;
-                        }
-
-                        //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
-                    }//end of if
-                }//end of inner for
-                tableNew.Expand();
-                AnsiConsole.Render(tableNew);
-            }//end of for
-
-            int lastRowNrOfCol = garageSize % 10;
-            //Console.WriteLine(" last row: " + lastRowNrOfCol);
-
-            if (lastRowNrOfCol >= 1)
-            {
-                    var tableNew = new Table();
-                    tableNew.Border = TableBorder.HeavyEdge;
-                    tableNew.BorderColor(new Color(0, 95, 255));
-                    tableNew.Alignment(Justify.Left);
-                for (int it = 0; it < lastRowNrOfCol; it++)
-                {
-                    int index = nrOfRow * 10 + it + 1;
-                    Console.WriteLine("index of cells: " + index);
-                    if (index >= parkingSpotsList.Count)
-                    {
-                        ParkingSpot ps = new ParkingSpot(index);
-                        parkingSpotsList.Add(ps);
-                        //tableNew.AddColumn(new TableColumn(ps.parkingSpotNr.ToString()).Footer("EDC").Centered());
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{ps.parkingSpotNr.ToString()}[/]")).Footer($"[bold]{ps.regNr}[/]").Centered());
-                    }
-                    else
-                    {
-                        string status = parkingSpotsList.ElementAt(index - 1).status;
-                        switch (status)
-                        {
-                            case "taken":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
-                                break;
-                            case "halffull":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
-                                break;
-                            default:
-                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(index - 1).regNr}[/]").Centered());
-                                break;
-                        }
-                        //tableNew.AddColumn(new TableColumn(parkingSpotsList.ElementAt(index - 1).parkingSpotNr.ToString()).Centered());
-                        
-                    }//end of if
-                }//end of inner for
-                    tableNew.Collapse();
-                    AnsiConsole.Render(tableNew);
-                    //table.AddColumn($"[bold dodgerblue2]{parkingSpot.regNr}[/]");
-            }//end of if
-
-
-            //Save ParkingSpotsList into a json file
-            SaveListInJsonFile(parkingSpotsList);
+  
 
         }//end of PrintParkingSpots
 
