@@ -210,8 +210,52 @@ namespace PragueParking2._0Proj
             //Printing last row which is less than 10
             int lastRowNrOfCol = garageSize % 10;
 
+            //If there is a row left, then print
+            if (lastRowNrOfCol >= 1)
+            {
+                var tableNew = new Table();
+                tableNew.Border = TableBorder.HeavyEdge;
+                tableNew.BorderColor(new Color(0, 95, 255));
+                tableNew.Alignment(Justify.Left);
+
+                for (int it = 0; it < lastRowNrOfCol; it++)
+                {
+                    int position = nrOfRow * 10 + it;
+                    Console.WriteLine("index of last row: " + position);
+                    if (position >= parkingSpotsList.Count)
+                    {
+                        Console.WriteLine("index is outside list");
+                        //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        ParkingSpot ps = new ParkingSpot(position + 1);
+                        parkingSpotsList.Add(ps);
+                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                    }
+                    else
+                    {
+                        Console.WriteLine("index is inside list");
+                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        string status = parkingSpotsList.ElementAt(position).status;
+                        switch (status)
+                        {
+                            case "taken":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                break;
+                            case "halffull":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                break;
+                            default:
+                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                break;
+                        }
+
+                    }//end of if
+                }//end of for
 
 
+                tableNew.Collapse();
+                AnsiConsole.Render(tableNew);
+            }
         }//end of PrintParkingSpots
 
 
