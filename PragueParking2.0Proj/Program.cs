@@ -180,14 +180,35 @@ namespace PragueParking2._0Proj
                         ParkingSpot ps = new ParkingSpot(position+1);
                         parkingSpotsList.Add(ps);
                         Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
                     } else
                     {
                         Console.WriteLine("index is inside list");
                         Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        string status = parkingSpotsList.ElementAt(position).status;
+                        switch (status)
+                        {
+                            case "taken":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                break;
+                            case "halffull":
+                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                break;
+                            default:
+                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                break;
+                        }
+
                     }//end of if
 
                 }//end of inner for
+                tableNew.Expand();
+                AnsiConsole.Render(tableNew);
             }//end of outer for
+
+
+            //Printing last row which is less than 10
+            int lastRowNrOfCol = garageSize % 10;
 
 
 
