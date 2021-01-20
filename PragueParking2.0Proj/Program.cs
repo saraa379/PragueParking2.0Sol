@@ -67,10 +67,11 @@ namespace PragueParking2._0Proj
         public static void SaveArrayInJsonFile(ParkingSpot[] parkingSpots)
         {
             string jsonString = JsonConvert.SerializeObject(parkingSpots);
-            Console.WriteLine("array: " + jsonString);
+            //Console.WriteLine("array: " + jsonString);
             //getting relative directory of the project folder
             string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\garage.json"));
             File.WriteAllText(path, jsonString);
+            Console.WriteLine("Array is saved in json file");
         }
 
         public static List<ParkingSpot> GetParkingSpotsList()
@@ -100,37 +101,13 @@ namespace PragueParking2._0Proj
         }
 
        
-
-        public static void SaveListInJsonFile(List<ParkingSpot> parkingSpots)
-        {
-            ParkingSpot[] parkingSpotArray = parkingSpots.ToArray();
-            string jsonString = JsonConvert.SerializeObject(parkingSpotArray);
-
-            //getting relative directory of the json file
-            string directory = AppDomain.CurrentDomain.BaseDirectory + "//garage.json";
-            string path = Path.GetFullPath("test/garage.json");
-
-            //Console.WriteLine(jsonString);
-
-            if (!File.Exists(directory))
-            {
-                Console.WriteLine("file doesn't exist");
-            } else
-            {
-                //Console.WriteLine("file exist");
-                //writing json string into json file, replacing the old file
-                File.WriteAllText(directory, jsonString);
-                //File.WriteAllText(path, jsonString);
-            }
-        }
-
         public static void PrintParkingSpots(){
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             int listSize = parkingSpotsList.Count;
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("Size of the list: " + listSize);
+            //Console.WriteLine("Size of the list: " + listSize);
 
             //Creating table for parkingSpots
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
@@ -152,8 +129,8 @@ namespace PragueParking2._0Proj
                 nrOfRow = 1;
             }
 
-            Console.WriteLine("columns: " + nrOfColumn);
-            Console.WriteLine("rows: " + nrOfRow);
+            //Console.WriteLine("columns: " + nrOfColumn);
+            //Console.WriteLine("rows: " + nrOfRow);
 
 
             //Printing table using Spectre.Console
@@ -170,21 +147,21 @@ namespace PragueParking2._0Proj
                 {
 
                     int position = i * 10 + it;
-                    Console.WriteLine("position of cells: " + position);
+                    //Console.WriteLine("position of cells: " + position);
                     //
 
                     if (position >= parkingSpotsList.Count)
                     {
-                        Console.WriteLine("index is outside list");
+                        //Console.WriteLine("index is outside list");
                         //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
                         ParkingSpot ps = new ParkingSpot(position+1);
                         parkingSpotsList.Add(ps);
-                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
                         tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
                     } else
                     {
-                        Console.WriteLine("index is inside list");
-                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        //Console.WriteLine("index is inside list");
+                        //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
                         string status = parkingSpotsList.ElementAt(position).status;
                         switch (status)
                         {
@@ -221,20 +198,20 @@ namespace PragueParking2._0Proj
                 for (int it = 0; it < lastRowNrOfCol; it++)
                 {
                     int position = nrOfRow * 10 + it;
-                    Console.WriteLine("index of last row: " + position);
+                    //Console.WriteLine("index of last row: " + position);
                     if (position >= parkingSpotsList.Count)
                     {
-                        Console.WriteLine("index is outside list");
+                        //Console.WriteLine("index is outside list");
                         //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
                         ParkingSpot ps = new ParkingSpot(position + 1);
                         parkingSpotsList.Add(ps);
-                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
                         tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
                     }
                     else
                     {
-                        Console.WriteLine("index is inside list");
-                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        //Console.WriteLine("index is inside list");
+                        //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
                         string status = parkingSpotsList.ElementAt(position).status;
                         switch (status)
                         {
@@ -256,6 +233,18 @@ namespace PragueParking2._0Proj
                 tableNew.Collapse();
                 AnsiConsole.Render(tableNew);
             }
+
+
+            //Save ParkingSpotsList into a json file
+            ParkingSpot[] parkingSpotArray = parkingSpotsList.ToArray();
+            SaveArrayInJsonFile(parkingSpotArray);
+            /*
+            foreach (ParkingSpot ps in parkingSpotsList)
+            {
+                Console.WriteLine("List at the end: " + ps.parkingSpotNr);
+            }*/
+
+
         }//end of PrintParkingSpots
 
 
