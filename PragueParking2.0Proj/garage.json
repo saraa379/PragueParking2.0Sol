@@ -159,6 +159,14 @@
 		"dateCheckedIn": "empty",
 		"nrOfVehicle": 0,
 		"typeOfVehicle": "empty"
+	},
+	{
+		"parkingSpotNr": 21,
+		"regNr": "empty",
+		"status": "empty",
+		"dateCheckedIn": "empty",
+		"nrOfVehicle": 0,
+		"typeOfVehicle": "empty"
 	}
 
 ]

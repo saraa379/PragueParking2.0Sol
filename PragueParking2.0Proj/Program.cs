@@ -35,8 +35,7 @@ namespace PragueParking2._0Proj
             Console.WriteLine();
             Console.WriteLine();
 
-            //PrintParkingSpots();
-            GetParkingSpotsList();
+            PrintParkingSpots();
 
 
 
@@ -78,27 +77,25 @@ namespace PragueParking2._0Proj
         {
             //getting relative directory of the json file
             string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\garage.json"));
-            string path2 = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\garage3.json"));
 
             List<ParkingSpot> parkingSpotsList;
 
             //check if file exist before reading from it
-            if (!File.Exists(path2))
+            if (!File.Exists(path))
             {
                 Console.WriteLine("file doesn't exist");
                 ParkingSpot[] parkingSpotsArray = CreateParkingSpotsList();
+                parkingSpotsList = parkingSpotsArray.ToList();
             }
             else
             {
-
+                //reading json file and saving the content in the string variable
+                var jsonString = File.ReadAllText(path);
+                parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
                 Console.WriteLine("File exist");
             }
 
-            //reading json file and saving the content in the string variable
-            var jsonString = File.ReadAllText(path);
-            //Console.WriteLine("current directory" + jsonString);
-            //deserialising a json string into C# object
-            parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
+            
             return parkingSpotsList;
         }
 
@@ -131,6 +128,8 @@ namespace PragueParking2._0Proj
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             int listSize = parkingSpotsList.Count;
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("Size of the list: " + listSize);
 
             //Creating table for parkingSpots
@@ -153,14 +152,44 @@ namespace PragueParking2._0Proj
                 nrOfRow = 1;
             }
 
-            //Console.WriteLine("columns: " + nrOfColumn);
-            //Console.WriteLine("rows: " + nrOfRow);
+            Console.WriteLine("columns: " + nrOfColumn);
+            Console.WriteLine("rows: " + nrOfRow);
 
 
             //Printing table using Spectre.Console
             Console.WriteLine();
 
-  
+            for (int i = 0; i < nrOfRow; i++)
+            {
+                var tableNew = new Table();
+                tableNew.Border = TableBorder.HeavyEdge;
+                tableNew.BorderColor(new Color(0, 95, 255));
+                tableNew.Centered();
+
+                for (int it = 0; it < nrOfColumn; it++)
+                {
+
+                    int position = i * 10 + it;
+                    Console.WriteLine("position of cells: " + position);
+                    //
+
+                    if (position >= parkingSpotsList.Count)
+                    {
+                        Console.WriteLine("index is outside list");
+                        //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                        ParkingSpot ps = new ParkingSpot(position+1);
+                        parkingSpotsList.Add(ps);
+                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                    } else
+                    {
+                        Console.WriteLine("index is inside list");
+                        Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
+                    }//end of if
+
+                }//end of inner for
+            }//end of outer for
+
+
 
         }//end of PrintParkingSpots
 
