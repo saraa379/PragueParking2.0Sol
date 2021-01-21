@@ -13,7 +13,6 @@ using System.Collections.Specialized;//for the XML config file
 using System.Collections.Generic;//for List
 using System.IO; //for file reading and writing
 using System.Linq;
-
 using Newtonsoft.Json;
 
 namespace PragueParking2._0Proj
@@ -36,6 +35,39 @@ namespace PragueParking2._0Proj
             Console.WriteLine();
 
             PrintParkingSpots();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            //Menu starts here
+            bool isOpen = true;
+
+            while (isOpen)
+            {
+                Console.WriteLine("");
+                // Ask for the user's favorite fruit
+                
+                var menuItem = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("[bold paleturquoise1]Please choose from the menu below?[/]")
+                        .PageSize(6)
+                        .AddChoices(new[] {
+                                "1. Leave a vehicle for parking",
+                                "2. Change a vehicle's parking spot by parking number",
+                                "5. Change a vehicle's parking spot by registration number",
+                                "3. Get your vehicle",
+                                "4. Search for a vehicle"
+                }));
+
+                Console.WriteLine("");
+
+
+                // Echo the fruit back to the terminal
+                Console.WriteLine("You have chosen: " + menuItem);
+
+              
+
+
+            }//end of while menu
 
 
 
@@ -71,7 +103,7 @@ namespace PragueParking2._0Proj
             //getting relative directory of the project folder
             string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\garage.json"));
             File.WriteAllText(path, jsonString);
-            Console.WriteLine("Array is saved in json file");
+            //Console.WriteLine("Array is saved in json file");
         }
 
         public static List<ParkingSpot> GetParkingSpotsList()
