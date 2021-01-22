@@ -391,10 +391,69 @@ namespace PragueParking2._0Proj
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
+            string regNrTrimmed = regNr; // Ignore white space on either side.
+                                            //convert to lower case
+            string lowerRegNr = regNrTrimmed.ToLower();
 
             if (type == "MC")
             {
-                Console.WriteLine("MC is gonna saved");
+                //Console.WriteLine("MC is gonna saved");
+                bool mcSaved = false;
+                
+                //try to find parking spots where 1 mc is saved
+                for (int i = 0; i < parkingSpotsArray.Length; i++)
+                {
+                    if (parkingSpotsArray[i].status.Equals("halffull"))
+                    {
+                        string joinedRegNr = parkingSpotsArray[i].regNr;
+                        joinedRegNr += "," + lowerRegNr;
+                        parkingSpotsArray[i].regNr = joinedRegNr;
+                        parkingSpotsArray[i].status = "taken";
+                        parkingSpotsArray[i].nrOfVehicle = 2;
+                        DateTime localDate = DateTime.Now;
+                        string joinedDateTime = parkingSpotsArray[i].dateCheckedIn;
+                        joinedDateTime += "," + localDate.ToString();
+                        parkingSpotsArray[i].dateCheckedIn = joinedDateTime;
+
+                        mcSaved = true;
+                        Console.WriteLine("found halffull ps, mc is saved in the parking spot nr: " + parkingSpotsArray[i].parkingSpotNr);
+                        break;
+                    }
+                }//end of for
+
+                ////try to find empty parking spots
+                if (!mcSaved)
+                {
+                    for (int i = 0; i < parkingSpotsArray.Length; i++)
+                    {
+                        if (parkingSpotsArray[i].status.Equals("empty"))
+                        {
+                            parkingSpotsArray[i].regNr = lowerRegNr;
+                            parkingSpotsArray[i].status = "halffull";
+                            parkingSpotsArray[i].nrOfVehicle = 1;
+                            DateTime localDate = DateTime.Now;
+                            string date_str = localDate.ToString();
+                            parkingSpotsArray[i].dateCheckedIn = date_str;
+                            parkingSpotsArray[i].typeOfVehicle = "mc";
+
+                            mcSaved = true;
+                            Console.WriteLine("found empty ps, mc is saved in the parking spot: " + parkingSpotsArray[i].parkingSpotNr);
+                            break;
+                        }
+                    }//end of for
+                }
+
+                if (mcSaved)
+                {
+                    SaveArrayInJsonFile(parkingSpotsArray);
+                    PrintParkingSpots();
+
+                } else
+                {
+                    Console.WriteLine("MC is not saved");
+                }
+
+                
             } else
             {
                 Console.WriteLine("Car is gonna saved");
