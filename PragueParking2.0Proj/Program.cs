@@ -70,7 +70,58 @@ namespace PragueParking2._0Proj
                 switch (charFirst)
                 {
                     case '1':
-                        Console.WriteLine("1. Leave a vehicle for parking");
+                        //Leaving vehicle to the garage
+                        Console.WriteLine("");
+                        Console.WriteLine("You chose to leave your vehicle for parking");
+                        Console.WriteLine("");
+                        string regNr = "empty";
+                        string type = "empty";
+
+
+                        //checks if registration nr is valid
+                        bool isValidRegNr = false;
+
+
+                        while (!isValidRegNr)
+                        {
+                            string strRegNr = AnsiConsole.Ask<string>("[paleturquoise1]Please enter your vehicle's registration number: [/]");
+                            bool isRegnrValid = IsInputRegnrValid(strRegNr);
+                            if (isRegnrValid)
+                            {
+                                regNr = strRegNr;
+                                isValidRegNr = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("Registration number is not valid");
+                                Console.WriteLine("");
+                            }
+
+                        }
+
+
+                        Console.WriteLine("");
+                        Console.WriteLine("Your reg number is: " + regNr);
+                        Console.WriteLine("");
+
+
+
+                        //Getting vehicle's type
+                        type = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                        .Title("[bold paleturquoise1]Please choose your vehicle's type?[/]")
+                        .PageSize(3)
+                        .AddChoices(new[] {
+                                "Car",
+                                "MC"
+                        }));
+
+                        Console.WriteLine("");
+                        Console.WriteLine("You have chosen: " + type);
+                        Console.WriteLine("");
+                        AddVehicle(regNr, type);
+
                         break;
                     case '2':
                         Console.WriteLine("2. Change a vehicle's parking spot by parking number");
@@ -302,6 +353,80 @@ namespace PragueParking2._0Proj
 
 
         }//end of PrintParkingSpots
+
+        //checks if input for regnr is valid
+        public static bool IsInputRegnrValid(string regnr)
+        {
+            bool isStrEmpty = String.IsNullOrEmpty(regnr);
+            if (!isStrEmpty)
+            {
+                string trimmed = regnr.Trim(); // Ignore white space on either side.
+                //convert to lower case
+                if (trimmed.Length <= 10)
+                {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("Registration number is too long. It should be no longer than 10 characters");
+                    Console.WriteLine("");
+                    return false;
+                }//end of inner if
+
+            }
+            else
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Please enter a valid registration number");
+                Console.WriteLine("");
+                return false; //input is empty string
+            }//end of outer if
+
+        }//end of IsInputTypeValid method
+
+        //add vehicle to parking
+        public static void AddVehicle(string regNr, string type)
+        {
+            //gets list of ParkingSpots from JSON file
+            List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
+            ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
+
+            if (type == "MC")
+            {
+                Console.WriteLine("MC is gonna saved");
+            } else
+            {
+                Console.WriteLine("Car is gonna saved");
+            }
+
+            //bool isAdded = false;
+            //find the 1st empty slot for inserting the vehicle in the ParkingSlots array
+
+            /*
+            for (int i = 0; i < ParkingSpots.parkingSpotsArray.Length; i++)
+            {
+                if (ParkingSpots.parkingSpotsArray[i].RegNr == "empty")
+                {
+                    ParkingSpots.parkingSpotsArray[i].RegNr = regNr;
+                    ParkingSpots.parkingSpotsArray[i].VehicleType = type;
+                    ParkingSpots.parkingSpotsArray[i].NrOfVehicle = nrOfVehicle;
+                    isAdded = true;
+                    Console.WriteLine("Your vehicle is added to out parking. Your vehicle's parking spot number is: " + i);
+                    break;
+                }
+            }//end of for
+
+            if (!isAdded)
+            {
+                Console.WriteLine("Our parking has no empty slot. Please try again later.");
+            }*/
+
+
+        }//end of AddVehicle method
+
+
+
 
 
     }//end of class program 
