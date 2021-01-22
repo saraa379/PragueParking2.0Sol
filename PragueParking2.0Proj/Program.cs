@@ -109,7 +109,7 @@ namespace PragueParking2._0Proj
                         //Getting vehicle's type
                         type = AnsiConsole.Prompt(
                         new SelectionPrompt<string>()
-                        .Title("[bold paleturquoise1]Please choose your vehicle's type?[/]")
+                        .Title("[bold paleturquoise1]Please choose to change your vehicle's parkingspot?[/]")
                         .PageSize(3)
                         .AddChoices(new[] {
                                 "Car",
@@ -123,7 +123,67 @@ namespace PragueParking2._0Proj
 
                         break;
                     case '2':
-                        Console.WriteLine("2. Change a vehicle's parkingspot");
+                        Console.WriteLine("You chose to leave your vehicle for parking");
+
+                        string regNrInput = "empty";
+                        int parkingNrInput = 0;
+                        int position = -1;
+
+                        //checks if registration nr is valid
+                        bool isValidregNrInput = false;
+
+
+                        while (!isValidregNrInput)
+                        {
+                            string strRegNrInput = AnsiConsole.Ask<string>("[paleturquoise1]Please enter your vehicle's registration number: [/]");
+                            bool isRegnrValid = IsInputRegnrValid(strRegNrInput);
+                            if (isRegnrValid)
+                            {
+                                position = IsRegnrAvailable(strRegNrInput);
+                                if (position != -1)
+                                {
+                                    regNrInput = strRegNrInput;
+                                    isValidregNrInput = true;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("Registration number is not valid");
+                                Console.WriteLine("");
+                            }
+
+                        }
+
+
+                        //checks if new parking nr is valid
+                        bool isValidParkingNrInput = false;
+
+                        while (!isValidParkingNrInput)
+                        {
+                            Console.WriteLine("");
+                            string strNr = AnsiConsole.Ask<string>("[paleturquoise1]Please enter parkingspot number where you want to move your vehicle: [/]");
+                            int intNr = IsNewParkingNrValid(strNr);
+
+                            if (intNr != -1)
+                            {
+                                parkingNrInput = intNr;
+                                isValidParkingNrInput = true;
+                            }
+                        }//end of while
+
+
+
+                        Console.WriteLine("");
+                        Console.WriteLine("Your reg number is: " + regNrInput);
+                        Console.WriteLine("Position of your vehicle is: " + position);
+                        Console.WriteLine("Your new ps nummer is valid: " + parkingNrInput);
+                        Console.WriteLine("");
+
+
+                        ChangeParkingSpot(position, parkingNrInput, regNrInput);
+
+
                         break;
                     case '3':
                         Console.WriteLine("3. Get your vehicle");
@@ -493,8 +553,119 @@ namespace PragueParking2._0Proj
 
         }//end of AddVehicle method
 
+        //changes vehicle's parking spot by reg nr
+        public static void ChangeParkingSpot(int position, int newNr, string regnr)
+        {
+            Console.WriteLine("parking spot will be changed");
+            /*
+
+            string regNr = ParkingSpots.parkingSpotsArray[oldNr].RegNr;
+            string type = ParkingSpots.parkingSpotsArray[oldNr].VehicleType;
+            int nrOfVehicles = ParkingSpots.parkingSpotsArray[oldNr].NrOfVehicle;
+
+            if (nrOfVehicles == 2)
+            {
+                //when there are 2 vehicles in the parking spot
+                int pos = regNr.IndexOf(regnr); //gets position of the regnr
+                string newStr = regNr.Remove(pos, regnr.Length); //removes the regnr from the string
+                string remainingRegnr = newStr.Trim(new Char[] { ' ', ',' }); //removes komma och white space from remaining reg
+
+                //moves the vehicle into new parking spot
+                ParkingSpots.parkingSpotsArray[newNr].RegNr = regnr;
+                ParkingSpots.parkingSpotsArray[newNr].VehicleType = type;
+                ParkingSpots.parkingSpotsArray[newNr].NrOfVehicle = 1;
+
+                //free the old parking spot
+                ParkingSpots.parkingSpotsArray[oldNr].RegNr = remainingRegnr;
+                ParkingSpots.parkingSpotsArray[oldNr].VehicleType = type;
+                ParkingSpots.parkingSpotsArray[oldNr].NrOfVehicle = 1;
+
+            }
+            else
+            {
+
+                //when there is only 1 vehicle in the parking spot
+                ParkingSpots.parkingSpotsArray[newNr].RegNr = regNr;
+                ParkingSpots.parkingSpotsArray[newNr].VehicleType = type;
+                ParkingSpots.parkingSpotsArray[newNr].NrOfVehicle = nrOfVehicles;
+
+                //free the old parking spot
+                ParkingSpots.parkingSpotsArray[oldNr].RegNr = "empty";
+                ParkingSpots.parkingSpotsArray[oldNr].VehicleType = "empty";
+                ParkingSpots.parkingSpotsArray[oldNr].NrOfVehicle = 0;
+            }
 
 
+
+
+
+            Console.WriteLine("Your vehicle is moved into new parking spot");
+            Console.WriteLine("Your vehicle's parking spot number is: " + newNr);
+
+            */
+        }//end of ChangeParkingSpot method
+
+
+        //checks if input parking nr is valid
+        public static int IsRegnrAvailable(string regnr)
+        {
+
+            //gets list of ParkingSpots from JSON file
+            List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
+            ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
+            string regNrTrimmed = regnr.Trim(); // Ignore white space on either side.
+                                         //convert to lower case
+            string lowerRegNr = regNrTrimmed.ToLower();
+
+            int position = -1;
+            bool isFound = false;
+
+            //Search for vehicle by regnr
+            for (int i = 0; i < parkingSpotsArray.Length; i++)
+            {
+                if (parkingSpotsArray[i].regNr.Contains(lowerRegNr, StringComparison.OrdinalIgnoreCase))
+                {
+
+                    isFound = true;
+                    position = i;
+                    break;
+
+                }
+            }//end of for
+
+            if (!isFound)
+            {
+                Console.WriteLine("Entered registration number is not found");
+                return -1;
+            }
+            else
+            {
+                return position;
+            }
+
+        }//end of IsRegnrAvailable method
+
+        //checks if input parking nr is valid number
+        public static int IsNewParkingNrValid(string raw)
+        {
+            string s = raw.Trim(); // Ignore white space on either side.
+            int number = Convert.ToInt32(s);
+
+            string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
+            int garageSize = Int32.Parse(sAttr);
+
+
+            if (number <= garageSize) //checks nr is not more than garage size
+            {
+                return number;
+            }
+            else
+            {
+                Console.WriteLine("Your parking slot number is not valid. Please enter number between 0-99");
+                return -1;
+            }
+
+        }//end of IsNewParkingNrValid method
 
 
     }//end of class program 
