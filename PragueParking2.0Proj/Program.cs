@@ -44,8 +44,10 @@ namespace PragueParking2._0Proj
             while (isOpen)
             {
                 Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("");
                 // Ask for the user's favorite fruit
-                
+
                 var menuItem = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("[bold paleturquoise1]Please choose from the menu below?[/]")
@@ -53,18 +55,40 @@ namespace PragueParking2._0Proj
                         .AddChoices(new[] {
                                 "1. Leave a vehicle for parking",
                                 "2. Change a vehicle's parking spot by parking number",
-                                "5. Change a vehicle's parking spot by registration number",
-                                "3. Get your vehicle",
-                                "4. Search for a vehicle"
+                                "3. Change a vehicle's parking spot by registration number",
+                                "4. Get your vehicle",
+                                "5. Search for a vehicle"
                 }));
 
                 Console.WriteLine("");
 
 
                 // Echo the fruit back to the terminal
-                Console.WriteLine("You have chosen: " + menuItem);
+                char charFirst = menuItem[0];
+                //Console.WriteLine("You have chosen: " + charFirst);
 
-              
+                switch (charFirst)
+                {
+                    case '1':
+                        Console.WriteLine("1. Leave a vehicle for parking");
+                        break;
+                    case '2':
+                        Console.WriteLine("2. Change a vehicle's parking spot by parking number");
+                        break;
+                    case '3':
+                        Console.WriteLine("3. Change a vehicle's parking spot by registration number");
+                        break;
+                    case '4':
+                        Console.WriteLine("4. Get your vehicle");
+                        break;
+                    case '5':
+                        Console.WriteLine("5. Search for a vehicle");
+                        break;
+                    default:
+                        Console.WriteLine("Please choose from the menu");
+                        break;
+                }
+
 
 
             }//end of while menu
