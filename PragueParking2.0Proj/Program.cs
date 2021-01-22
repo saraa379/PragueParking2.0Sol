@@ -441,7 +441,7 @@ namespace PragueParking2._0Proj
                             break;
                         }
                     }//end of for
-                }
+                }//end of if
 
                 if (mcSaved)
                 {
@@ -456,30 +456,43 @@ namespace PragueParking2._0Proj
                 
             } else
             {
-                Console.WriteLine("Car is gonna saved");
-            }
+                //Console.WriteLine("Car is gonna saved");
 
-            //bool isAdded = false;
-            //find the 1st empty slot for inserting the vehicle in the ParkingSlots array
-
-            /*
-            for (int i = 0; i < ParkingSpots.parkingSpotsArray.Length; i++)
-            {
-                if (ParkingSpots.parkingSpotsArray[i].RegNr == "empty")
+                bool carSaved = false;
+                ////try to find empty parking spots
+                if (!carSaved)
                 {
-                    ParkingSpots.parkingSpotsArray[i].RegNr = regNr;
-                    ParkingSpots.parkingSpotsArray[i].VehicleType = type;
-                    ParkingSpots.parkingSpotsArray[i].NrOfVehicle = nrOfVehicle;
-                    isAdded = true;
-                    Console.WriteLine("Your vehicle is added to out parking. Your vehicle's parking spot number is: " + i);
-                    break;
-                }
-            }//end of for
+                    for (int i = 0; i < parkingSpotsArray.Length; i++)
+                    {
+                        if (parkingSpotsArray[i].status.Equals("empty"))
+                        {
+                            parkingSpotsArray[i].regNr = lowerRegNr;
+                            parkingSpotsArray[i].status = "taken";
+                            parkingSpotsArray[i].nrOfVehicle = 1;
+                            DateTime localDate = DateTime.Now;
+                            string date_str = localDate.ToString();
+                            parkingSpotsArray[i].dateCheckedIn = date_str;
+                            parkingSpotsArray[i].typeOfVehicle = "car";
 
-            if (!isAdded)
-            {
-                Console.WriteLine("Our parking has no empty slot. Please try again later.");
-            }*/
+                            carSaved = true;
+                            Console.WriteLine("found empty ps, car is saved in the parking spot: " + parkingSpotsArray[i].parkingSpotNr);
+                            break;
+                        }
+                    }//end of for
+                }//end of if
+
+                if (carSaved)
+                {
+                    SaveArrayInJsonFile(parkingSpotsArray);
+                    PrintParkingSpots();
+
+                }
+                else
+                {
+                    Console.WriteLine("Car is not saved");
+                }//end of inner if else
+
+            }//end of outer if else
 
 
         }//end of AddVehicle method
