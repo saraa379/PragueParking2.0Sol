@@ -174,7 +174,7 @@ namespace PragueParking2._0Proj
                         {
                             Console.WriteLine("");
                             string strNr = AnsiConsole.Ask<string>("[paleturquoise1]Please enter parkingspot number where you want to move your vehicle: [/]");
-                            int intNr = IsNewParkingNrValid(strNr, position);
+                            int intNr = IsNewParkingNrValid(strNr, position); //returns position of a new parkingspot
 
                             if (intNr != -1)
                             {
@@ -565,55 +565,104 @@ namespace PragueParking2._0Proj
         }//end of AddVehicle method
 
         //changes vehicle's parking spot by reg nr
-        public static void ChangeParkingSpot(int position, int newNr, string regnr)
+        public static void ChangeParkingSpot(int oldPosition, int newPosition, string regnr)
         {
             Console.WriteLine("parking spot will be changed");
-            /*
+            //gets list of ParkingSpots from JSON file
+            List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
+            ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
 
-            string regNr = ParkingSpots.parkingSpotsArray[oldNr].RegNr;
-            string type = ParkingSpots.parkingSpotsArray[oldNr].VehicleType;
-            int nrOfVehicles = ParkingSpots.parkingSpotsArray[oldNr].NrOfVehicle;
-
-            if (nrOfVehicles == 2)
+            if (parkingSpotsArray[oldPosition].nrOfVehicle == 2) //when there are 2 vehicles in the parking spot
             {
-                //when there are 2 vehicles in the parking spot
-                int pos = regNr.IndexOf(regnr); //gets position of the regnr
-                string newStr = regNr.Remove(pos, regnr.Length); //removes the regnr from the string
+                //separating regnr from joined regnr
+                string joinedRegNr = parkingSpotsArray[oldPosition].vh.RegNr;
+                int pos = joinedRegNr.IndexOf(regnr); //gets position of the regnr
+                string newStr = joinedRegNr.Remove(pos, regnr.Length); //removes the regnr from the string
                 string remainingRegnr = newStr.Trim(new Char[] { ' ', ',' }); //removes komma och white space from remaining reg
 
+                Console.WriteLine("position of the regnr in the joined regnr" + pos); //0
+
+                //separating CheckedInDate from joined dates
+                string joinedDate = parkingSpotsArray[oldPosition].dateCheckedIn;
+                string[] dates = joinedDate.Split(',');
+                //Console.WriteLine("First date: " + dates[0]);
+                //Console.WriteLine("Second date: " + dates[1]);
+                string dateTobeMoved;
+                string dateToStay;
+
+                if (pos == 0) //first date belongs to the vehicle to be removed
+                {
+                    dateTobeMoved = dates[0];
+                    dateToStay = dates[1];
+                } else
+                {
+                    dateTobeMoved = dates[1];
+                    dateToStay = dates[0];
+                }
+
                 //moves the vehicle into new parking spot
-                ParkingSpots.parkingSpotsArray[newNr].RegNr = regnr;
-                ParkingSpots.parkingSpotsArray[newNr].VehicleType = type;
-                ParkingSpots.parkingSpotsArray[newNr].NrOfVehicle = 1;
+                
+                if (parkingSpotsArray[newPosition].nrOfVehicle == 1) //there is mc in the new ps
+                {
+                    parkingSpotsArray[newPosition].vh.RegNr += "," + regnr;
+                    parkingSpotsArray[newPosition].status = "taken";
+                    parkingSpotsArray[newPosition].dateCheckedIn += "," + dateTobeMoved;
+                    parkingSpotsArray[newPosition].nrOfVehicle = 2;
+                } else //new ps is empty
+                {
+                    MC mc = new MC(regnr);
+                    parkingSpotsArray[newPosition].vh = mc;
+                    parkingSpotsArray[newPosition].status = "halffull";
+                    parkingSpotsArray[newPosition].dateCheckedIn = dateTobeMoved;
+                    parkingSpotsArray[newPosition].nrOfVehicle = 1;
+                }
+
 
                 //free the old parking spot
-                ParkingSpots.parkingSpotsArray[oldNr].RegNr = remainingRegnr;
-                ParkingSpots.parkingSpotsArray[oldNr].VehicleType = type;
-                ParkingSpots.parkingSpotsArray[oldNr].NrOfVehicle = 1;
+
+                if (parkingSpotsArray[oldPosition].nrOfVehicle == 2) //there are 2 mc in the old ps
+                {
+                    parkingSpotsArray[oldPosition].vh.RegNr = remainingRegnr;
+                    parkingSpotsArray[oldPosition].status = "halffull";
+                    parkingSpotsArray[oldPosition].dateCheckedIn = dateToStay;
+                    parkingSpotsArray[oldPosition].nrOfVehicle = 1;
+                }
+                else //old ps shall be empty
+                {
+                    parkingSpotsArray[oldPosition].vh.RegNr = "empty";
+                    parkingSpotsArray[oldPosition].vh.Type = "empty";
+                    parkingSpotsArray[oldPosition].status = "empty";
+                    parkingSpotsArray[oldPosition].dateCheckedIn = "empty";
+                    parkingSpotsArray[oldPosition].nrOfVehicle = 0;
+                }
+
+
+
 
             }
-            else
+            else //when there is only 1 car need to be moved
             {
-
-                //when there is only 1 vehicle in the parking spot
-                ParkingSpots.parkingSpotsArray[newNr].RegNr = regNr;
-                ParkingSpots.parkingSpotsArray[newNr].VehicleType = type;
-                ParkingSpots.parkingSpotsArray[newNr].NrOfVehicle = nrOfVehicles;
+                //moves the vehicle into new parking spot
+                Car car = new Car(regnr);
+                parkingSpotsArray[newPosition].vh = car;
+                parkingSpotsArray[newPosition].status = "taken";
+                parkingSpotsArray[newPosition].dateCheckedIn = parkingSpotsArray[oldPosition].dateCheckedIn;
+                parkingSpotsArray[newPosition].nrOfVehicle = 1;
 
                 //free the old parking spot
-                ParkingSpots.parkingSpotsArray[oldNr].RegNr = "empty";
-                ParkingSpots.parkingSpotsArray[oldNr].VehicleType = "empty";
-                ParkingSpots.parkingSpotsArray[oldNr].NrOfVehicle = 0;
+                parkingSpotsArray[oldPosition].vh.RegNr = "empty";
+                parkingSpotsArray[oldPosition].vh.Type = "empty";
+                parkingSpotsArray[oldPosition].status = "empty";
+                parkingSpotsArray[oldPosition].dateCheckedIn = "empty";
+                parkingSpotsArray[oldPosition].nrOfVehicle = 0;
+
             }
 
 
+            Console.WriteLine("Your vehicle is moved into the new parkingspot");
 
-
-
-            Console.WriteLine("Your vehicle is moved into new parking spot");
-            Console.WriteLine("Your vehicle's parking spot number is: " + newNr);
-
-            */
+            SaveArrayInJsonFile(parkingSpotsArray);
+            PrintParkingSpots();
         }//end of ChangeParkingSpot method
 
 
