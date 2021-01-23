@@ -151,19 +151,16 @@ namespace PragueParking2._0Proj
                         {
                             string strRegNrInput = AnsiConsole.Ask<string>("[paleturquoise1]Please enter your vehicle's registration number: [/]");
                             bool isRegnrValid = IsInputRegnrValid(strRegNrInput);
-                            if (isRegnrValid)
+                            position = IsRegnrAvailable(strRegNrInput);
+                            if (isRegnrValid && position != -1)
                             {
-                                position = IsRegnrAvailable(strRegNrInput);
-                                if (position != -1)
-                                {
                                     regNrInput = strRegNrInput;
                                     isValidregNrInput = true;
-                                }
                             }
                             else
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("Registration number is not valid");
+                                Console.WriteLine("Registration number is not found in the garage");
                                 Console.WriteLine("");
                             }
 
@@ -177,7 +174,7 @@ namespace PragueParking2._0Proj
                         {
                             Console.WriteLine("");
                             string strNr = AnsiConsole.Ask<string>("[paleturquoise1]Please enter parkingspot number where you want to move your vehicle: [/]");
-                            int intNr = IsNewParkingNrValid(strNr);
+                            int intNr = IsNewParkingNrValid(strNr, position);
 
                             if (intNr != -1)
                             {
@@ -654,24 +651,46 @@ namespace PragueParking2._0Proj
             }
             else
             {
+                Console.WriteLine("Reg number is available in the system");
                 return position;
             }
 
         }//end of IsRegnrAvailable method
 
         //checks if input parking nr is valid number
-        public static int IsNewParkingNrValid(string raw)
+        public static int IsNewParkingNrValid(string positionNew, int positionOld)
         {
-            string s = raw.Trim(); // Ignore white space on either side.
+            //gets list of ParkingSpots from JSON file
+            List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
+            ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
+
+            string s = positionNew.Trim(); // Ignore white space on either side.
             int number = Convert.ToInt32(s);
 
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfPSpots");
             int garageSize = Int32.Parse(sAttr);
 
+            //finding out type of the vehicle that gonna move
+            string type = parkingSpotsArray[positionOld].vh.Type;
+            Console.WriteLine("Type of a vehicle that gonna move is: " + type);
 
-            if (number <= garageSize) //checks nr is not more than garage size
+
+            if (number < garageSize) //checks nr is not more than garage size
             {
-                return number;
+                if (type == "car" && String.Equals(parkingSpotsArray[number - 1].status, "empty"))
+                {
+                    return number - 1;
+                } else if (type == "mc" && String.Equals(parkingSpotsArray[number - 1].status, "empty")){
+                    return number - 1;
+                } else if (type == "mc" && String.Equals(parkingSpotsArray[number - 1].status, "halffull"))
+                {
+                    return number - 1;
+                } else
+                {
+                    Console.WriteLine("The new parkingspot is already taken");
+                    return - 1;
+                }
+                
             }
             else
             {
