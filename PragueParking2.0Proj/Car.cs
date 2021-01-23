@@ -11,5 +11,10 @@ namespace PragueParking2._0Proj
             RegNr = regNr;
             Type = "car";
         }
+        public Car()
+        {
+            RegNr = "empty";
+            Type = "car";
+        }
     }
 }

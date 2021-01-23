@@ -74,7 +74,7 @@ namespace PragueParking2._0Proj
                         Console.WriteLine("You chose to leave your vehicle for parking");
                         Console.WriteLine("");
                         string regNr = "empty";
-                        string type = "empty";
+                        
 
 
                         //checks if registration nr is valid
@@ -107,9 +107,10 @@ namespace PragueParking2._0Proj
 
 
                         //Getting vehicle's type
+                        string type = "empty";
                         type = AnsiConsole.Prompt(
                         new SelectionPrompt<string>()
-                        .Title("[bold paleturquoise1]Please choose to change your vehicle's parkingspot?[/]")
+                        .Title("[bold paleturquoise1]Please choose type of your vehicle?[/]")
                         .PageSize(3)
                         .AddChoices(new[] {
                                 "Car",
@@ -119,11 +120,24 @@ namespace PragueParking2._0Proj
                         Console.WriteLine("");
                         Console.WriteLine("You have chosen: " + type);
                         Console.WriteLine("");
-                        AddVehicle(regNr, type);
+
+                        Vehicle vh = new Vehicle();
+
+                        if (type == "MC")
+                        {
+                            MC motorcycle = new MC(regNr);
+                            vh = motorcycle;
+                        } else
+                        {
+                            Car car = new Car(regNr);
+                            vh = car;
+                        }
+
+                        AddVehicle(vh);
 
                         break;
                     case '2':
-                        Console.WriteLine("You chose to leave your vehicle for parking");
+                        Console.WriteLine("You chose to change parkingspot for your vehicle");
 
                         string regNrInput = "empty";
                         int parkingNrInput = 0;
@@ -320,7 +334,7 @@ namespace PragueParking2._0Proj
                         ParkingSpot ps = new ParkingSpot(position+1);
                         parkingSpotsList.Add(ps);
                         //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                     } else
                     {
                         //Console.WriteLine("index is inside list");
@@ -329,13 +343,13 @@ namespace PragueParking2._0Proj
                         switch (status)
                         {
                             case "taken":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                                 break;
                             case "halffull":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                                 break;
                             default:
-                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                                 break;
                         }
 
@@ -369,7 +383,7 @@ namespace PragueParking2._0Proj
                         ParkingSpot ps = new ParkingSpot(position + 1);
                         parkingSpotsList.Add(ps);
                         //Console.WriteLine("ps nr: " + parkingSpotsList.ElementAt(position).parkingSpotNr);
-                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                        tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                     }
                     else
                     {
@@ -379,13 +393,13 @@ namespace PragueParking2._0Proj
                         switch (status)
                         {
                             case "taken":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                tableNew.AddColumn(new TableColumn(new Markup($"[red bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                                 break;
                             case "halffull":
-                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                tableNew.AddColumn(new TableColumn(new Markup($"[yellow1 bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                                 break;
                             default:
-                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).regNr}[/]").Centered());
+                                tableNew.AddColumn(new TableColumn(new Markup($"[bold]{parkingSpotsList.ElementAt(position).parkingSpotNr.ToString()}[/]")).Footer($"[bold]{parkingSpotsList.ElementAt(position).vh.RegNr}[/]").Centered());
                                 break;
                         }
 
@@ -442,16 +456,16 @@ namespace PragueParking2._0Proj
         }//end of IsInputTypeValid method
 
         //add vehicle to parking
-        public static void AddVehicle(string regNr, string type)
+        public static void AddVehicle(Vehicle vh)
         {
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
-            string regNrTrimmed = regNr; // Ignore white space on either side.
+            string regNrTrimmed = vh.RegNr; // Ignore white space on either side.
                                             //convert to lower case
             string lowerRegNr = regNrTrimmed.ToLower();
 
-            if (type == "MC")
+            if (vh.Type == "mc")
             {
                 //Console.WriteLine("MC is gonna saved");
                 bool mcSaved = false;
@@ -461,9 +475,9 @@ namespace PragueParking2._0Proj
                 {
                     if (parkingSpotsArray[i].status.Equals("halffull"))
                     {
-                        string joinedRegNr = parkingSpotsArray[i].regNr;
+                        string joinedRegNr = parkingSpotsArray[i].vh.RegNr;
                         joinedRegNr += "," + lowerRegNr;
-                        parkingSpotsArray[i].regNr = joinedRegNr;
+                        parkingSpotsArray[i].vh.RegNr = joinedRegNr;
                         parkingSpotsArray[i].status = "taken";
                         parkingSpotsArray[i].nrOfVehicle = 2;
                         DateTime localDate = DateTime.Now;
@@ -484,13 +498,13 @@ namespace PragueParking2._0Proj
                     {
                         if (parkingSpotsArray[i].status.Equals("empty"))
                         {
-                            parkingSpotsArray[i].regNr = lowerRegNr;
+                            parkingSpotsArray[i].vh.RegNr = lowerRegNr;
                             parkingSpotsArray[i].status = "halffull";
                             parkingSpotsArray[i].nrOfVehicle = 1;
                             DateTime localDate = DateTime.Now;
                             string date_str = localDate.ToString();
                             parkingSpotsArray[i].dateCheckedIn = date_str;
-                            parkingSpotsArray[i].typeOfVehicle = "mc";
+                            parkingSpotsArray[i].vh.Type = "mc";
 
                             mcSaved = true;
                             Console.WriteLine("found empty ps, mc is saved in the parking spot: " + parkingSpotsArray[i].parkingSpotNr);
@@ -522,13 +536,13 @@ namespace PragueParking2._0Proj
                     {
                         if (parkingSpotsArray[i].status.Equals("empty"))
                         {
-                            parkingSpotsArray[i].regNr = lowerRegNr;
+                            parkingSpotsArray[i].vh.RegNr = lowerRegNr;
                             parkingSpotsArray[i].status = "taken";
                             parkingSpotsArray[i].nrOfVehicle = 1;
                             DateTime localDate = DateTime.Now;
                             string date_str = localDate.ToString();
                             parkingSpotsArray[i].dateCheckedIn = date_str;
-                            parkingSpotsArray[i].typeOfVehicle = "car";
+                            parkingSpotsArray[i].vh.Type = "car";
 
                             carSaved = true;
                             Console.WriteLine("found empty ps, car is saved in the parking spot: " + parkingSpotsArray[i].parkingSpotNr);
@@ -623,7 +637,7 @@ namespace PragueParking2._0Proj
             //Search for vehicle by regnr
             for (int i = 0; i < parkingSpotsArray.Length; i++)
             {
-                if (parkingSpotsArray[i].regNr.Contains(lowerRegNr, StringComparison.OrdinalIgnoreCase))
+                if (parkingSpotsArray[i].vh.RegNr.Contains(lowerRegNr, StringComparison.OrdinalIgnoreCase))
                 {
 
                     isFound = true;
