@@ -226,7 +226,8 @@ namespace PragueParking2._0Proj
 
                         }
 
-                        Console.WriteLine("Reg nr available. You can get your car" + regNrInputG);
+                        //Console.WriteLine("Reg nr available. You can get your car" + regNrInputG);
+                        RemoveVehicle(regNrInputG, positionG);
 
                         break;
                     case '4':
@@ -597,7 +598,7 @@ namespace PragueParking2._0Proj
         //changes vehicle's parking spot by reg nr
         public static void ChangeParkingSpot(int oldPosition, int newPosition, string regnr)
         {
-            Console.WriteLine("parking spot will be changed");
+            //Console.WriteLine("parking spot will be changed");
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
@@ -778,6 +779,117 @@ namespace PragueParking2._0Proj
             }
 
         }//end of IsNewParkingNrValid method
+
+        public static void RemoveVehicle(string regNr, int position)
+        {
+            //Console.WriteLine("Your vehicle will be removed: " + regNr + ", " + position);
+            //gets list of ParkingSpots from JSON file
+            List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
+            ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
+
+
+            if (parkingSpotsArray[position].nrOfVehicle == 2) //remove mc
+            {
+                Console.WriteLine("mc will be removed");
+
+                //separating regnr from joined regnr
+                string joinedRegNr = parkingSpotsArray[position].vh.RegNr;
+                int pos = joinedRegNr.IndexOf(regNr); //gets position of the regnr
+                string newStr = joinedRegNr.Remove(pos, regNr.Length); //removes the regnr from the string
+                string remainingRegnr = newStr.Trim(new Char[] { ' ', ',' }); //removes komma och white space from remaining reg
+
+                //Console.WriteLine("position of the regnr in the joined regnr" + pos); //0
+
+                //separating CheckedInDate from joined dates
+                string joinedDate = parkingSpotsArray[position].dateCheckedIn;
+                string[] dates = joinedDate.Split(',');
+                //Console.WriteLine("First date: " + dates[0]);
+                //Console.WriteLine("Second date: " + dates[1]);
+                string dateTobeMoved;
+                string dateToStay;
+
+                if (pos == 0) //first date belongs to the vehicle to be removed
+                {
+                    dateTobeMoved = dates[0];
+                    dateToStay = dates[1];
+                }
+                else
+                {
+                    dateTobeMoved = dates[1];
+                    dateToStay = dates[0];
+                }
+
+                int mcFee = GetParkingCharge(dateTobeMoved, "mc");
+
+                //remove vehicle from parkingspot
+                parkingSpotsArray[position].vh.RegNr = remainingRegnr;
+                parkingSpotsArray[position].status = "halffull";
+                parkingSpotsArray[position].dateCheckedIn = dateToStay;
+                parkingSpotsArray[position].nrOfVehicle = 1;
+
+                Console.WriteLine("Your mc is removed");
+
+            } else {
+
+                int carFee = GetParkingCharge(parkingSpotsArray[position].dateCheckedIn, "car");
+
+                //free the old parking spot
+                Vehicle vh = new Vehicle();
+                parkingSpotsArray[position].vh = vh;
+                parkingSpotsArray[position].status = "empty";
+                parkingSpotsArray[position].dateCheckedIn = "empty";
+                parkingSpotsArray[position].nrOfVehicle = 0;
+
+            }
+
+            SaveArrayInJsonFile(parkingSpotsArray);
+            PrintParkingSpots();
+
+        }//end of RemoveVehicle
+
+        public static int GetParkingCharge(string dateCheckedIn, string type)
+        {
+
+            DateTime dateIn = DateTime.Parse(dateCheckedIn);
+            DateTime dateStart = dateIn.AddMinutes(10); //first 10 minutes are free
+            DateTime dateOut = DateTime.Now;
+            Console.WriteLine("chekced in date: " + dateStart);
+            Console.WriteLine("chekced out date: " + dateOut);
+
+            TimeSpan timeDiff = dateOut - dateStart;
+            int elapsedTime = Convert.ToInt32(timeDiff.TotalHours);
+            elapsedTime = elapsedTime + 1;
+            //Console.WriteLine("Elapsed time in hours: " + elapsedTime);
+
+            if (String.Equals(type, "mc"))
+            {
+                //Getting fee information from config file
+                string mcFeeStr = ConfigurationManager.AppSettings.Get("MCPrice");
+                int mcFee = Int32.Parse(mcFeeStr);
+                int totalFee = elapsedTime * mcFee;
+
+                Console.WriteLine("");
+                Console.WriteLine("Total elapsed time including started time: " + elapsedTime);
+                Console.WriteLine("Your fee is: " + totalFee);
+                Console.WriteLine("");
+
+                return totalFee;
+
+            } else
+            {
+                //Getting fee information from config file
+                string mcFeeStr = ConfigurationManager.AppSettings.Get("CarPrice");
+                int carFee = Int32.Parse(mcFeeStr);
+                int totalFeeCar = elapsedTime * carFee;
+
+                Console.WriteLine("");
+                Console.WriteLine("Total elapsed time including started time: " + elapsedTime);
+                Console.WriteLine("Your fee is: " + totalFeeCar);
+                Console.WriteLine("");
+
+                return totalFeeCar;
+            }
+        }//end of GetParkingCharge
 
 
     }//end of class program 
