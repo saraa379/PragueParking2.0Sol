@@ -231,7 +231,35 @@ namespace PragueParking2._0Proj
 
                         break;
                     case '4':
-                        Console.WriteLine("4. Search for a vehicle");
+                        Console.WriteLine("");
+                        Console.WriteLine("4. You chose to search your vehicle");
+                        Console.WriteLine("");
+
+
+                        //checks if registration nr is valid
+                        bool isValidregNrInputS = false;
+
+                        while (!isValidregNrInputS)
+                        {
+                            string strRegNrInputS = AnsiConsole.Ask<string>("[paleturquoise1]Please enter your vehicle's registration number: [/]");
+                            bool isRegnrValidS = IsInputRegnrValid(strRegNrInputS);
+                            int positionS = IsRegnrAvailable(strRegNrInputS);
+                            if (isRegnrValidS && positionS != -1)
+                            {
+                                //regNrInputS = strRegNrInputS;
+                                isValidregNrInputS = true;
+                                int psNr = positionS + 1;
+                                Console.WriteLine("Your vehicle with registration number " + strRegNrInputS + " is in the parkingspot " + psNr);
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("Registration number is not found in the garage");
+                                Console.WriteLine("");
+                            }
+
+                        }
+
                         break;
                     default:
                         Console.WriteLine("Please choose from the menu");
