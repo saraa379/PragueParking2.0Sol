@@ -524,6 +524,9 @@ namespace PragueParking2._0Proj
             if (vh.Type == "mc")
             {
                 //Console.WriteLine("MC is gonna saved");
+                string sAttr = ConfigurationManager.AppSettings.Get("NrOfMCPerPSpot");
+                int mcSize = Int32.Parse(sAttr);
+                
                 bool mcSaved = false;
                 
                 //try to find parking spots where 1 mc is saved
@@ -531,11 +534,19 @@ namespace PragueParking2._0Proj
                 {
                     if (parkingSpotsArray[i].status.Equals("halffull"))
                     {
+                        int nrOfVehicle = parkingSpotsArray[i].nrOfVehicle;
                         string joinedRegNr = parkingSpotsArray[i].vh.RegNr;
                         joinedRegNr += "," + lowerRegNr;
                         parkingSpotsArray[i].vh.RegNr = joinedRegNr;
-                        parkingSpotsArray[i].status = "taken";
-                        parkingSpotsArray[i].nrOfVehicle = 2;
+                        parkingSpotsArray[i].nrOfVehicle = nrOfVehicle + 1;
+                        //status
+                        if (parkingSpotsArray[i].nrOfVehicle == mcSize)
+                        {
+                            parkingSpotsArray[i].status = "taken";
+                        } else
+                        {
+                            parkingSpotsArray[i].status = "halffull";
+                        }
                         DateTime localDate = DateTime.Now;
                         string joinedDateTime = parkingSpotsArray[i].dateCheckedIn;
                         joinedDateTime += "," + localDate.ToString();
@@ -548,6 +559,7 @@ namespace PragueParking2._0Proj
                 }//end of for
 
                 ////try to find empty parking spots
+                
                 if (!mcSaved)
                 {
                     for (int i = 0; i < parkingSpotsArray.Length; i++)
@@ -555,12 +567,21 @@ namespace PragueParking2._0Proj
                         if (parkingSpotsArray[i].status.Equals("empty"))
                         {
                             parkingSpotsArray[i].vh.RegNr = lowerRegNr;
-                            parkingSpotsArray[i].status = "halffull";
                             parkingSpotsArray[i].nrOfVehicle = 1;
+                            //status
+                            if (parkingSpotsArray[i].nrOfVehicle >= mcSize)
+                            {
+                                parkingSpotsArray[i].status = "taken";
+                            }
+                            else
+                            {
+                                parkingSpotsArray[i].status = "halffull";
+                            }
                             DateTime localDate = DateTime.Now;
                             string date_str = localDate.ToString();
                             parkingSpotsArray[i].dateCheckedIn = date_str;
                             parkingSpotsArray[i].vh.Type = "mc";
+                            parkingSpotsArray[i].vh.Size = mcSize;
 
                             mcSaved = true;
                             Console.WriteLine("found empty ps, mc is saved in the parking spot: " + parkingSpotsArray[i].parkingSpotNr);
@@ -585,6 +606,9 @@ namespace PragueParking2._0Proj
                 //Console.WriteLine("Car is gonna saved");
 
                 bool carSaved = false;
+
+                string sAttrCar = ConfigurationManager.AppSettings.Get("NrOfCarPerPSpot");
+                int carSize = Int32.Parse(sAttrCar);
                 ////try to find empty parking spots
                 if (!carSaved)
                 {
@@ -599,6 +623,7 @@ namespace PragueParking2._0Proj
                             string date_str = localDate.ToString();
                             parkingSpotsArray[i].dateCheckedIn = date_str;
                             parkingSpotsArray[i].vh.Type = "car";
+                            parkingSpotsArray[i].vh.Size = carSize;
 
                             carSaved = true;
                             Console.WriteLine("found empty ps, car is saved in the parking spot: " + parkingSpotsArray[i].parkingSpotNr);
@@ -630,6 +655,9 @@ namespace PragueParking2._0Proj
             //gets list of ParkingSpots from JSON file
             List<ParkingSpot> parkingSpotsList = GetParkingSpotsList();
             ParkingSpot[] parkingSpotsArray = parkingSpotsList.ToArray();
+            //Console.WriteLine("MC is gonna saved");
+            string sAttr = ConfigurationManager.AppSettings.Get("NrOfMCPerPSpot");
+            int mcSize = Int32.Parse(sAttr);
 
             if (parkingSpotsArray[oldPosition].nrOfVehicle == 2) //when there are 2 vehicles in the parking spot
             {
@@ -661,17 +689,32 @@ namespace PragueParking2._0Proj
 
                 //moves the vehicle into new parking spot
                 
-                if (parkingSpotsArray[newPosition].nrOfVehicle == 1) //there is mc in the new ps
+                if (parkingSpotsArray[newPosition].nrOfVehicle >= 1 && parkingSpotsArray[newPosition].nrOfVehicle < mcSize) //there is mc in the new ps
                 {
                     parkingSpotsArray[newPosition].vh.RegNr += "," + regnr;
-                    parkingSpotsArray[newPosition].status = "taken";
+                    int nrOfMC = parkingSpotsArray[newPosition].nrOfVehicle;
+                    parkingSpotsArray[newPosition].nrOfVehicle = nrOfMC + 1;
+                    if (parkingSpotsArray[newPosition].nrOfVehicle == mcSize)
+                    {
+                        parkingSpotsArray[newPosition].status = "taken";
+                    } else
+                    {
+                        parkingSpotsArray[newPosition].status = "halffull";
+                    }
                     parkingSpotsArray[newPosition].dateCheckedIn += "," + dateTobeMoved;
-                    parkingSpotsArray[newPosition].nrOfVehicle = 2;
+                 
                 } else //new ps is empty
                 {
                     MC mc = new MC(regnr);
                     parkingSpotsArray[newPosition].vh = mc;
-                    parkingSpotsArray[newPosition].status = "halffull";
+                    if (parkingSpotsArray[newPosition].nrOfVehicle >= mcSize)
+                    {
+                        parkingSpotsArray[newPosition].status = "taken";
+                    }
+                    else
+                    {
+                        parkingSpotsArray[newPosition].status = "halffull";
+                    }
                     parkingSpotsArray[newPosition].dateCheckedIn = dateTobeMoved;
                     parkingSpotsArray[newPosition].nrOfVehicle = 1;
                 }
@@ -693,6 +736,7 @@ namespace PragueParking2._0Proj
                     parkingSpotsArray[oldPosition].status = "empty";
                     parkingSpotsArray[oldPosition].dateCheckedIn = "empty";
                     parkingSpotsArray[oldPosition].nrOfVehicle = 0;
+                    parkingSpotsArray[oldPosition].vh.Size = 0;
                 }
 
 
@@ -714,6 +758,7 @@ namespace PragueParking2._0Proj
                 parkingSpotsArray[oldPosition].status = "empty";
                 parkingSpotsArray[oldPosition].dateCheckedIn = "empty";
                 parkingSpotsArray[oldPosition].nrOfVehicle = 0;
+                parkingSpotsArray[oldPosition].vh.Size = 0;
 
             }
 

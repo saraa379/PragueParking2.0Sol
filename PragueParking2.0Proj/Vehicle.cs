@@ -10,10 +10,13 @@ namespace PragueParking2._0Proj
         public string RegNr { get; set; }
         public string Type { get; set; }
 
+        public int Size { get; set; }
+
         public Vehicle()
         {
             RegNr = "empty";
             Type = "empty";
+            Size = 0;
         }
     }
 
