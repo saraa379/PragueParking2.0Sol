@@ -722,24 +722,58 @@ namespace PragueParking2._0Proj
 
                 //free the old parking spot
 
-                if (parkingSpotsArray[oldPosition].nrOfVehicle == 2) //there are 2 mc in the old ps
-                {
                     parkingSpotsArray[oldPosition].vh.RegNr = remainingRegnr;
                     parkingSpotsArray[oldPosition].status = "halffull";
                     parkingSpotsArray[oldPosition].dateCheckedIn = dateToStay;
                     parkingSpotsArray[oldPosition].nrOfVehicle = 1;
-                }
-                else //old ps shall be empty
+                
+
+
+
+
+            } else if (parkingSpotsArray[oldPosition].nrOfVehicle == 1 && String.Equals(parkingSpotsArray[oldPosition].vh.Type, "mc")) //when 1 mc need to be moved
+            {
+      
+                //moves the vehicle into new parking spot
+
+                if (parkingSpotsArray[newPosition].nrOfVehicle >= 1 && parkingSpotsArray[newPosition].nrOfVehicle < mcSize) //there is mc in the new ps
                 {
-                    parkingSpotsArray[oldPosition].vh.RegNr = "empty";
-                    parkingSpotsArray[oldPosition].vh.Type = "empty";
-                    parkingSpotsArray[oldPosition].status = "empty";
-                    parkingSpotsArray[oldPosition].dateCheckedIn = "empty";
-                    parkingSpotsArray[oldPosition].nrOfVehicle = 0;
-                    parkingSpotsArray[oldPosition].vh.Size = 0;
+                    parkingSpotsArray[newPosition].vh.RegNr += "," + regnr;
+                    int nrOfMC = parkingSpotsArray[newPosition].nrOfVehicle;
+                    parkingSpotsArray[newPosition].nrOfVehicle = nrOfMC + 1;
+                    if (parkingSpotsArray[newPosition].nrOfVehicle == mcSize)
+                    {
+                        parkingSpotsArray[newPosition].status = "taken";
+                    }
+                    else
+                    {
+                        parkingSpotsArray[newPosition].status = "halffull";
+                    }
+                    parkingSpotsArray[newPosition].dateCheckedIn += "," + parkingSpotsArray[oldPosition].dateCheckedIn;
+
+                }
+                else //new ps is empty
+                {
+                    MC mc = new MC(regnr);
+                    parkingSpotsArray[newPosition].vh = mc;
+                    if (parkingSpotsArray[newPosition].nrOfVehicle >= mcSize)
+                    {
+                        parkingSpotsArray[newPosition].status = "taken";
+                    }
+                    else
+                    {
+                        parkingSpotsArray[newPosition].status = "halffull";
+                    }
+                    parkingSpotsArray[newPosition].dateCheckedIn = parkingSpotsArray[oldPosition].dateCheckedIn;
+                    parkingSpotsArray[newPosition].nrOfVehicle = 1;
                 }
 
-
+                parkingSpotsArray[oldPosition].vh.RegNr = "empty";
+                parkingSpotsArray[oldPosition].vh.Type = "empty";
+                parkingSpotsArray[oldPosition].status = "empty";
+                parkingSpotsArray[oldPosition].dateCheckedIn = "empty";
+                parkingSpotsArray[oldPosition].nrOfVehicle = 0;
+                parkingSpotsArray[oldPosition].vh.Size = 0;
 
 
             }

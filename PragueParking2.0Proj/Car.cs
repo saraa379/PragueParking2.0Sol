@@ -10,13 +10,13 @@ namespace PragueParking2._0Proj
         public Car(string regNr)
         {
             RegNr = regNr;
-            Type = "car";
+            Type = GetVhType();
             Size = GetSize();
         }
         public Car()
         {
             RegNr = "empty";
-            Type = "car";
+            Type = GetVhType();
             Size = GetSize();
         }
 
@@ -25,6 +25,13 @@ namespace PragueParking2._0Proj
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfCarPerPSpot");
             int carSize = Int32.Parse(sAttr);
             return carSize;
+        }
+
+        private string GetVhType()
+        {
+            string joinedType = ConfigurationManager.AppSettings.Get("Fordonstyp");
+            string[] types = joinedType.Split(',');
+            return types[1];
         }
     }
 }

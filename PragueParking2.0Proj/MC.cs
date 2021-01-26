@@ -10,14 +10,14 @@ namespace PragueParking2._0Proj
         public MC(string regNr)
         {
             RegNr = regNr;
-            Type = "mc";
+            Type = GetVhType();
             Size = GetSize();
         }
 
         public MC()
         {
             RegNr = "empty";
-            Type = "mc";
+            Type = GetVhType();
             Size = GetSize();
         }
 
@@ -26,6 +26,13 @@ namespace PragueParking2._0Proj
             string sAttr = ConfigurationManager.AppSettings.Get("NrOfMCPerPSpot");
             int mcSize = Int32.Parse(sAttr);
             return mcSize;
+        }
+
+        private string GetVhType()
+        {
+            string joinedType = ConfigurationManager.AppSettings.Get("Fordonstyp");
+            string[] types = joinedType.Split(',');
+            return types[0];
         }
     }
 }
