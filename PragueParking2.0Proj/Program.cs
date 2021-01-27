@@ -326,7 +326,7 @@ namespace PragueParking2._0Proj
                 //reading json file and saving the content in the string variable
                 var jsonString = File.ReadAllText(path);
                 parkingSpotsList = JsonConvert.DeserializeObject<List<ParkingSpot>>(jsonString);
-                Console.WriteLine("File exist");
+                //Console.WriteLine("File exist");
             }
 
             
